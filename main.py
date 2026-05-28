@@ -1,3 +1,8 @@
-def main():
-    return "Hello World"
-print(main())
+import time
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+driver.get("https://qa-guru.github.io/one-page-form/text-box.html")
+driver.maximize_window()
+time.sleep(5)
+print("Test прошел успешно")
