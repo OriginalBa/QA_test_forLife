@@ -16,13 +16,13 @@ class TestModelFormLogin:
         self.driver = None
         self.url = url
 
-    def test_set_up(self):
+    def set_up(self):
         self.driver = webdriver.Chrome()
         self.driver.get(self.url)
         self.driver.maximize_window()
         time.sleep(3)  # Пауза, чтобы визуально заметить открытие
 
-    def test_tear_down(self):
+    def tear_down(self):
         # 5. Закрытие браузера в любом случае
         self.driver.quit()
 
@@ -45,40 +45,40 @@ class TestModelFormLogin:
         return self.driver.find_element(*self.error_locator).text
 
 
-def test_01_positive():
+def test_fill_all_fields():
     login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
-    login_form.test_set_up()
+    login_form.set_up()
     login_form.set_login_field("user1")
     login_form.set_password_field("password1")
     login_form.click_submit_button()
     assert login_form.get_welcome_message_text() == "Welcome, user1!"
     login_form.click_logout_button()
-    login_form.test_tear_down()
+    login_form.tear_down()
 
 
-def test_02_negative():
+def test_02_negative_nologin():
     login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
-    login_form.test_set_up()
+    login_form.set_up()
     login_form.click_submit_button()
     assert login_form.get_error_text() == "Login and password are required (minimum 3 and 6 characters)"
-    login_form.test_tear_down()
+    login_form.tear_down()
 
 
-def test_03_negative():
+def test_03_negative_wronglogin():
     login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
-    login_form.test_set_up()
+    login_form.set_up()
     login_form.set_login_field("user5")
     login_form.set_password_field("password1")
     login_form.click_submit_button()
     assert login_form.get_error_text() == "Wrong login or password"
-    login_form.test_tear_down()
+    login_form.tear_down()
 
 
-def test_04_negative():
+def test_04_negative_wrongpassword():
     login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
-    login_form.test_set_up()
+    login_form.set_up()
     login_form.set_login_field("user1")
     login_form.set_password_field("password5")
     login_form.click_submit_button()
     assert login_form.get_error_text() == "Wrong login or password"
-    login_form.test_tear_down()
+    login_form.tear_down()

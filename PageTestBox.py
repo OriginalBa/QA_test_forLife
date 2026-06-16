@@ -228,6 +228,7 @@ class TestModelForm1:
             # 5. Закрытие браузера в любом случае
             self.test_tear_down()
 
+
 test_model_form = TestModelForm1()
 test_model_form.test_positive_two_fields()
 test_model_form = TestModelForm1()
