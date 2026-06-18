@@ -1,6 +1,7 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class TestModelFormLogin:
@@ -12,6 +13,7 @@ class TestModelFormLogin:
     error_locator = (By.ID, "error-message")
 
     def __init__(self, url):
+        self.wait = None
         self.driver = None
         self.url = url
 
@@ -19,10 +21,9 @@ class TestModelFormLogin:
         self.driver = webdriver.Chrome()
         self.driver.get(self.url)
         self.driver.maximize_window()
-        time.sleep(3)  # Пауза, чтобы визуально заметить открытие
+        self.wait = WebDriverWait(self.driver, 3)
 
     def tear_down(self):
-        # 5. Закрытие браузера в любом случае
         self.driver.quit()
 
     def set_login_field(self, login):
