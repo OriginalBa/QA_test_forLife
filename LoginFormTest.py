@@ -1,7 +1,5 @@
-import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 
 
 class TestModelFormLogin:
@@ -12,16 +10,15 @@ class TestModelFormLogin:
     welcome_message_locator = (By.ID, "welcome-message")
     error_locator = (By.ID, "error-message")
 
-    def __init__(self, url):
+    def __init__(self):
         self.wait = None
         self.driver = None
-        self.url = url
 
     def set_up(self):
         self.driver = webdriver.Chrome()
-        self.driver.get(self.url)
+        self.driver.get("https://qa-guru.github.io/one-page-form/login.html")
         self.driver.maximize_window()
-        self.wait = WebDriverWait(self.driver, 3)
+        self.driver.implicitly_wait(5)
 
     def tear_down(self):
         self.driver.quit()
@@ -46,39 +43,47 @@ class TestModelFormLogin:
 
 
 def test_fill_all_fields():
-    login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
+    login_form = TestModelFormLogin()
     login_form.set_up()
-    login_form.set_login_field("user1")
-    login_form.set_password_field("password1")
-    login_form.click_submit_button()
-    assert login_form.get_welcome_message_text() == "Welcome, user1!"
-    login_form.click_logout_button()
-    login_form.tear_down()
+    try:
+        login_form.set_login_field("user1")
+        login_form.set_password_field("password1")
+        login_form.click_submit_button()
+        assert login_form.get_welcome_message_text() == "Welcome, user1!"
+        login_form.click_logout_button()
+    finally:
+        login_form.tear_down()
 
 
 def test_02_negative_nologin():
-    login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
+    login_form = TestModelFormLogin()
     login_form.set_up()
-    login_form.click_submit_button()
-    assert login_form.get_error_text() == "Login and password are required (minimum 3 and 6 characters)"
-    login_form.tear_down()
+    try:
+        login_form.click_submit_button()
+        assert login_form.get_error_text() == "Login and password are required (minimum 3 and 6 characters)"
+    finally:
+        login_form.tear_down()
 
 
 def test_03_negative_wronglogin():
-    login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
+    login_form = TestModelFormLogin()
     login_form.set_up()
-    login_form.set_login_field("user5")
-    login_form.set_password_field("password1")
-    login_form.click_submit_button()
-    assert login_form.get_error_text() == "Wrong login or password"
-    login_form.tear_down()
+    try:
+        login_form.set_login_field("user5")
+        login_form.set_password_field("password1")
+        login_form.click_submit_button()
+        assert login_form.get_error_text() == "Wrong login or password"
+    finally:
+        login_form.tear_down()
 
 
 def test_04_negative_wrongpassword():
-    login_form = TestModelFormLogin(url="https://qa-guru.github.io/one-page-form/login.html")
+    login_form = TestModelFormLogin()
     login_form.set_up()
-    login_form.set_login_field("user1")
-    login_form.set_password_field("password5")
-    login_form.click_submit_button()
-    assert login_form.get_error_text() == "Wrong login or password"
-    login_form.tear_down()
+    try:
+        login_form.set_login_field("user1")
+        login_form.set_password_field("password5")
+        login_form.click_submit_button()
+        assert login_form.get_error_text() == "Wrong login or password"
+    finally:
+        login_form.tear_down()
