@@ -10,7 +10,7 @@ import allure
 @allure.title("Отправка формы с корректными данными")
 @allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.smoke
-@pytest.mark.regress
+@pytest.mark.regression
 @pytest.mark.parametrize("name, email, current_address, permanent_address", [
     ("John Doe", "john@example.com", "123 Elm St", "456 Oak St"),  # Стандартный кейс
     ("Иван Иванов", "ivan@mail.ru", "ул. Ленина, д. 1", "ул. Пушкина, д. 2"),  # Кириллица
@@ -39,7 +39,7 @@ def test_positive_all_fields(driver, name, email, current_address, permanent_add
 @allure.title("Отправка формы с заполненными не всеми полями")
 @allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.smoke
-@pytest.mark.regress
+@pytest.mark.regression
 @pytest.mark.parametrize("invalid_email", [
     "plainaddress",  # Нет собаки и домена
     "@no-local-part.com",  # Нет имени пользователя
@@ -63,7 +63,7 @@ def test_invalid_email(driver, invalid_email):
 @allure.story("Защита от XSS и HTML-инъекций")
 @allure.title("Обработка потенциально опасного ввода")
 @allure.severity(allure.severity_level.BLOCKER)
-@pytest.mark.regress
+@pytest.mark.regression
 @pytest.mark.parametrize("security_payload", [
     "<script>alert('xss')</script>",  # Базовый XSS скрипт
     "1' OR '1'='1",  # Базовая SQL-инъекция
